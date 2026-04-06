@@ -1,14 +1,26 @@
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSqlite<SetecContext>("Data Source=setec_logistica_v8.db");
+
+// Lê a URL do banco da variável de ambiente (Render) ou do appsettings (local)
+var connStr = Environment.GetEnvironmentVariable("DATABASE_URL")
+              ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<SetecContext>(opt => opt.UseNpgsql(connStr));
 builder.Services.AddCors();
 
 var app = builder.Build();
-app.UseCors(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); 
+
+app.UseCors(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+// Cria as tabelas automaticamente na primeira execução
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<SetecContext>();
+    db.Database.EnsureCreated();
+}
 
 app.MapPost("/api/viagens", async (SetecContext db, Solicitacao s) => {
-    await db.Database.EnsureCreatedAsync(); 
     db.Solicitacoes.Add(s);
     await db.SaveChangesAsync();
     return Results.Created($"/api/viagens/{s.Id}", s);
