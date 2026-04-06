@@ -34,22 +34,35 @@ const SetecLogisticaUnificada = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setEnviando(true);
-    try {
-        const res = await fetch("https://formulariosetec.onrender.com/api/viagens");
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
-        alert("✅ Logística Completa Gravada!");
-        if (isAdmin) buscarDados();
-      }
-    } catch (e) { alert("Erro ao salvar."); }
-    setEnviando(false);
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setEnviando(true);
+        try {
+            // O fetch deve abrir aqui e só fechar DEPOIS do body
+            const res = await fetch("https://formulariosetec.onrender.com/api/viagens", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (res.ok) {
+                alert("✅ Logística Completa Gravada!");
+                // Limpa o formulário após enviar (opcional, mas recomendado)
+                setFormData({
+                    hospitalEvento: '', projeto: '', dataVisita: '',
+                    especialistaNome: '', espAereo: '', espCarro: '', espOnibus: '', espTaxiTransfer: '', espHotel: '', espStatus: '', espObs: '',
+                    medicoNome: '', medAereo: '', medCarro: '', medOnibus: '', medTaxiTransfer: '', medHotel: '', medStatus: '', medObs: ''
+                });
+                if (isAdmin) buscarDados();
+            } else {
+                alert("Erro no servidor: " + res.status);
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Erro ao conectar com a API.");
+        }
+        setEnviando(false);
+    };
 
   const renderLogisticaSection = (prefix, titulo) => {
     const isEsp = prefix === 'esp';
