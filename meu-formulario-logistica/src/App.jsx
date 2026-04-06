@@ -24,7 +24,7 @@ const SetecLogisticaUnificada = () => {
 
   const buscarDados = async () => {
     try {
-      const res = await fetch("http://localhost:5036/api/viagens");
+        const res = await fetch("https://formulariosetec.onrender.com/api/viagens");
       if (res.ok) setViagens(await res.json());
     } catch (e) { console.error(e); }
   };
