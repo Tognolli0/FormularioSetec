@@ -38,7 +38,7 @@ const SetecLogisticaUnificada = () => {
     e.preventDefault();
     setEnviando(true);
     try {
-      const res = await fetch("http://localhost:5036/api/viagens", {
+        const res = await fetch("https://formulariosetec.onrender.com/api/viagens");
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
