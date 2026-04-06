@@ -1,0 +1,6 @@
+@SetecApi_HostAddress = http://localhost:5036
+
+GET {{SetecApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
