@@ -2,20 +2,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-# Copia o projeto e restaura as dependências
+# Copia o projeto e restaura
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copia o restante do código e compila
+# Copia o código e publica
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Estágio Final (Runtime)
+# Estágio de Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/out .
 
-# Expõe a porta que o Render usa
+# Variável para a porta que o Render exige
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 

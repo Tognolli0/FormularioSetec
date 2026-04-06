@@ -14,11 +14,11 @@ var app = builder.Build();
 app.UseCors(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 // Cria as tabelas automaticamente na primeira execução
-using (var scope = app.Services.CreateScope())
+/*using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SetecContext>();
     db.Database.EnsureCreated();
-}
+}*/
 
 app.MapPost("/api/viagens", async (SetecContext db, Solicitacao s) => {
     db.Solicitacoes.Add(s);
