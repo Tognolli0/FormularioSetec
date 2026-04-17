@@ -2,24 +2,25 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 
 const logoSetec = "https://media.licdn.com/dms/image/v2/D4D0BAQG8ohr1uOx4zw/company-logo_200_200/company-logo_200_200/0/1727114312808/setec_consulting_group_logo?e=1776297600&v=beta&t=KJ9LiGTLK0GB9nIJL3lqGcfc0qNOr62NxwqDuqh5AqY";
+const API_URL = import.meta.env.VITE_API_URL || "https://formulariosetec.onrender.com/api/viagens";
+const ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY || "setec2026";
+
+const createInitialFormData = () => ({
+    hospitalEvento: '', projeto: '', dataVisita: '',
+    especialistaNome: '', espAereo: '', espCarro: '', espOnibus: '', espTaxiTransfer: '', espHotel: '', espStatus: '', espObs: '',
+    medicoNome: '', medAereo: '', medCarro: '', medOnibus: '', medTaxiTransfer: '', medHotel: '', medStatus: '', medObs: ''
+});
 
 const SetecLogisticaUnificada = () => {
     const [viagens, setViagens] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
     const [enviando, setEnviando] = useState(false);
 
-    const [formData, setFormData] = useState({
-        hospitalEvento: '', projeto: '', dataVisita: '',
-        especialistaNome: '', espAereo: '', espCarro: '', espOnibus: '', espTaxiTransfer: '', espHotel: '', espStatus: '', espObs: '',
-        medicoNome: '', medAereo: '', medCarro: '', medOnibus: '', medTaxiTransfer: '', medHotel: '', medStatus: '', medObs: ''
-    });
-
-    // URL da sua API no Render
-    const API_URL = "https://formulariosetec.onrender.com/api/viagens";
+    const [formData, setFormData] = useState(createInitialFormData);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        if (params.get('admin') === 'setec2026') {
+        if (params.get('admin') === ADMIN_KEY) {
             setIsAdmin(true);
             buscarDados();
         }
@@ -54,11 +55,7 @@ const SetecLogisticaUnificada = () => {
 
             if (res.ok) {
                 alert("✅ Logística Gravada com Sucesso!");
-                setFormData({
-                    hospitalEvento: '', projeto: '', dataVisita: '',
-                    especialistaNome: '', espAereo: '', espCarro: '', espOnibus: '', espTaxiTransfer: '', espHotel: '', espStatus: '', espObs: '',
-                    medicoNome: '', medAereo: '', medCarro: '', medOnibus: '', medTaxiTransfer: '', medHotel: '', medStatus: '', medObs: ''
-                });
+                setFormData(createInitialFormData());
                 if (isAdmin) buscarDados();
             } else {
                 alert("Erro ao salvar: " + res.status);

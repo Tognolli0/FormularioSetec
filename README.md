@@ -29,6 +29,7 @@ Sistema full stack para centralizar solicitacoes de logistica de viagens, com fo
 2. Defina `DATABASE_URL` no ambiente ou em configuracao local nao versionada.
 3. Rode a API em `SetecApi`.
 4. Rode o frontend em `meu-formulario-logistica`.
+5. Use `SetecApi/appsettings.Local.example.json` e `meu-formulario-logistica/.env.example` como base para o ambiente local.
 
 ## Seguranca
 

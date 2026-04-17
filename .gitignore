@@ -101,6 +101,7 @@ StyleCopReport.xml
 *.db-shm
 *.db-wal
 appsettings.Local.json
+SetecApi/appsettings.Local.json
 
 # Chutzpah Test files
 _Chutzpah*
